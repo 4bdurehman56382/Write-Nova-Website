@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-labelledby="title">
+  <title id="title">WriteNova star mark</title>
+  <g fill="#FF5830">
+    <path d="M94 86 100 16l8 70z"/>
+    <path d="m112 87 39-49-25 55z"/>
+    <path d="m115 95 72 5-72 7z"/>
+    <path d="m112 113 39 49-45-38z"/>
+    <path d="m106 115-6 75-7-75z"/>
+    <path d="m88 113-39 49 27-55z"/>
+    <path d="m85 107-72-7 72-5z"/>
+    <path d="m88 87-39-49 45 44z"/>
+    <circle cx="100" cy="100" r="16"/>
+  </g>
+</svg>

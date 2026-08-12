@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'WriteNova — Content That Connects. Copy That Converts.',
+  description = 'High-quality content writing for businesses and agencies: SEO blogs, website copy, landing pages, email content, and white-label writing support.',
+} = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+const searchConsoleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const analyticsId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#161316" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    {searchConsoleVerification && <meta name="google-site-verification" content={searchConsoleVerification} />}
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" />
+    {analyticsId && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${analyticsId}`}></script>
+        <script is:inline define:vars={{ analyticsId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { window.dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', analyticsId);
+        </script>
+      </>
+    )}
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <slot />
+  </body>
+</html>
