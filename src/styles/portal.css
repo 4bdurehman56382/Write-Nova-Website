@@ -11,12 +11,12 @@
 .portal-brand { display: inline-flex; align-items: center; gap: 9px; color: #f2e5d4; text-decoration: none; font-size: 19px; font-weight: 600; letter-spacing: -.04em; }
 .portal-brand img { width: 29px; height: 29px; }.portal-brand span span { color: #ff6d29; }
 .portal-header > p { margin: 0; color: #cfc0ae; font-size: 13px; font-weight: 600; }
-.portal-auth { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(390px, .85fr); gap: clamp(48px, 7vw, 110px); align-items: center; min-height: calc(100svh - 78px); padding: 72px 6vw; }
+.portal-auth { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: clamp(42px, 5vw, 88px); align-items: center; min-height: calc(100svh - 78px); padding: 72px 6vw; }
 .portal-auth-copy { max-width: 780px; }.portal-eyebrow { margin: 0 0 16px; color: #ff6d29; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .portal-auth h1, .portal-setup h1 { max-width: 13ch; margin: 0 0 22px; font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 600; letter-spacing: -.04em; line-height: .93; text-wrap: balance; }
 .portal-auth-copy > p:not(.portal-eyebrow), .portal-setup > p { max-width: 47ch; margin: 0; color: #cfc0ae; font-size: 17px; text-wrap: pretty; }
 .portal-back { display: inline-block; margin-top: 32px; color: #ff6d29; font-size: 14px; font-weight: 600; text-decoration: none; }
-.portal-login { display: grid; width: min(100%, 640px); justify-self: end; gap: 26px; padding: 38px; border: 1px solid rgba(242, 229, 212, .25); background: #211a1a; }
+.portal-login { display: grid; width: min(100%, 720px); justify-self: stretch; gap: 30px; padding: 44px; border: 1px solid rgba(242, 229, 212, .25); background: #211a1a; }
 .portal-login > div, .portal-field { display: grid; gap: 8px; }.portal-login label, .portal-field > span { color: #f2e5d4; font-size: 13px; font-weight: 600; }
 .portal-login input, .portal-field input, .portal-field textarea { width: 100%; border: 1px solid rgba(242, 229, 212, .27); border-radius: 7px; background: #161316; color: #f2e5d4; transition: border-color 180ms ease, background 180ms ease; }
 .portal-login input { min-height: 54px; padding: 12px 14px; }.portal-field input { min-height: 44px; padding: 9px 11px; }.portal-field textarea { min-height: 112px; padding: 10px 11px; resize: vertical; }

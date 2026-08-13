@@ -16,7 +16,7 @@ const respond = (status: number, body: Record<string, string | boolean>) => new 
 
 const redirectToPortal = (search = '') => new Response(null, {
   status: 303,
-  headers: { Location: `/portal${search}`, 'Cache-Control': 'no-store' },
+  headers: { Location: `/portal${search || '?signed-in=1'}`, 'Cache-Control': 'no-store' },
 });
 
 export const POST: APIRoute = async ({ request, cookies }) => {

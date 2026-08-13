@@ -12,6 +12,7 @@ const portalConfigured = Boolean(
 );
 const portalError = new URL(Astro.request.url).searchParams.get('error') ?? '';
 const authenticatedEmail = getSessionEmail(Astro.cookies.get(portalSessionCookie)?.value);
+Astro.response.headers.set('Cache-Control', 'no-store');
 ---
 
 <!doctype html>
