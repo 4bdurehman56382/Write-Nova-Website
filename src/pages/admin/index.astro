@@ -92,6 +92,10 @@ const oauthBaseUrl = (import.meta.env.PUBLIC_DECAP_OAUTH_BASE_URL ?? '').replace
         window.CMS.init({
           config: {
             load_config_file: false,
+            site_url: 'https://writenova-website.vercel.app',
+            // Required by Decap even when no image fields are currently used.
+            media_folder: 'public/uploads',
+            public_folder: '/uploads',
             backend: {
               name: 'github',
               repo: repository,
