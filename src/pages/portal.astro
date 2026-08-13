@@ -9,6 +9,7 @@ const portalConfigured = Boolean(
   && import.meta.env.CMS_ADMIN_PASSWORD_HASH
   && import.meta.env.CMS_SESSION_SECRET,
 );
+const portalError = new URL(Astro.request.url).searchParams.get('error') ?? '';
 ---
 
 <!doctype html>
@@ -45,7 +46,7 @@ const portalConfigured = Boolean(
           <p>Sign in with the email and password supplied by your WriteNova team. Your website stays live while you work.</p>
           <a href="/" class="portal-back">← Back to website</a>
         </div>
-        <form class="portal-login" data-login-form>
+        <form class="portal-login" action="/api/portal/login" method="post">
           <div>
             <label for="portal-email">Email address or username</label>
             <input id="portal-email" name="email" type="text" autocomplete="username" required />
@@ -55,7 +56,7 @@ const portalConfigured = Boolean(
             <input id="portal-password" name="password" type="password" autocomplete="current-password" required />
           </div>
           <p class="portal-message" data-login-message aria-live="polite"></p>
-          <button type="submit" class="portal-primary" data-login-button>Sign in <span aria-hidden="true">↗</span></button>
+          <button type="submit" class="portal-primary">Sign in <span aria-hidden="true">↗</span></button>
         </form>
       </section>
 
@@ -84,13 +85,11 @@ const portalConfigured = Boolean(
       </section>
     </main>
 
-    <script is:inline define:vars={{ portalConfigured, fallbackContent }}>
+    <script is:inline define:vars={{ portalConfigured, portalError, fallbackContent }}>
       const setupView = document.querySelector('[data-portal-setup]');
       const authView = document.querySelector('[data-portal-auth]');
       const editorView = document.querySelector('[data-portal-editor]');
-      const loginForm = document.querySelector('[data-login-form]');
       const loginMessage = document.querySelector('[data-login-message]');
-      const loginButton = document.querySelector('[data-login-button]');
       const nav = document.querySelector('[data-portal-nav]');
       const editorContent = document.querySelector('[data-portal-content]');
       const editorTitle = document.querySelector('[data-portal-title]');
@@ -335,30 +334,6 @@ const portalConfigured = Boolean(
         showEditor(user);
       }
 
-      loginForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const form = new FormData(loginForm);
-        loginButton.disabled = true;
-        loginButton.textContent = 'Signing in…';
-        setLoginMessage('');
-        try {
-          const response = await portalRequest('/api/portal/login', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: form.get('email'), password: form.get('password') }),
-          });
-          const data = await response.json();
-          if (!response.ok || !data.email) throw new Error(data.message || 'That email or password is not recognised.');
-          loginButton.textContent = 'Opening your portal…';
-          window.location.assign('/portal');
-          return;
-        } catch (error) {
-          setLoginMessage(error.message || 'Unable to sign in. Please try again.', true);
-        } finally {
-          loginButton.disabled = false;
-          loginButton.innerHTML = 'Sign in <span aria-hidden="true">↗</span>';
-        }
-      });
-
       saveButton.addEventListener('click', async () => {
         if (!state.user) return;
         saveButton.disabled = true;
@@ -401,6 +376,8 @@ const portalConfigured = Boolean(
           authView.hidden = true;
           return;
         }
+        if (portalError === 'invalid-login') setLoginMessage('That username or password is not recognised.', true);
+        if (portalError === 'setup') setLoginMessage('The content portal has not been connected yet.', true);
         try {
           const response = await portalRequest('/api/portal/session');
           if (!response.ok) return;
