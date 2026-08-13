@@ -145,16 +145,16 @@ img { display: block; max-width: 100%; }
 .reason-list span { color: var(--coral); font-size: 10px; font-weight: 600; }
 
 .process-section { background: var(--ink); }
-.process-heading { grid-template-columns: minmax(120px, .58fr) minmax(0, 1.42fr) minmax(220px, .86fr); align-items: end; column-gap: clamp(28px, 4vw, 64px); }
-.process-title h2 { margin-bottom: 0; }
-.process-summary { max-width: 29ch; margin: 0; color: var(--beige-muted); font-size: 15px; line-height: 1.48; }
-.process-list { margin: clamp(56px, 8vw, 100px) 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
-.process-item { display: grid; grid-template-columns: minmax(42px, .32fr) minmax(185px, 1.08fr) minmax(0, 1.38fr) 42px; gap: clamp(18px, 3vw, 52px); align-items: center; min-height: 136px; padding: 24px 0; border-bottom: 1px solid var(--line); transition: background 220ms ease, padding 220ms var(--ease-out); }
-.process-item:hover { padding-right: 16px; padding-left: 16px; background: color-mix(in srgb, var(--coral) 9%, transparent); }
+.process-heading { grid-template-columns: minmax(120px, .22fr) minmax(0, 1.78fr); align-items: start; column-gap: clamp(40px, 4vw, 64px); }
+.process-title h2 { max-width: none; margin-bottom: 0; font-size: clamp(3.85rem, 5.9vw, 6rem); line-height: .9; }
+.process-summary { display: none; }
+.process-list { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: clamp(48px, 5.5vw, 76px) 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.process-item { display: flex; flex-direction: column; min-height: 342px; padding: 34px 26px 28px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: background 220ms ease; }
+.process-item:hover { background: color-mix(in srgb, var(--coral) 9%, transparent); }
 .process-number { color: var(--coral); font-size: 12px; font-weight: 600; }
-.process-item h3 { margin: 0; font-size: clamp(1.35rem, 2.05vw, 1.9rem); font-weight: 500; letter-spacing: -.045em; line-height: .98; }
-.process-item p { max-width: 42ch; margin: 0; color: var(--beige-muted); font-size: 15px; line-height: 1.45; }
-.process-arrow { justify-self: end; color: var(--coral); font-size: 23px; transition: transform 200ms var(--ease-out); }
+.process-item h3 { margin: 84px 0 14px; font-size: clamp(1.15rem, 1.55vw, 1.42rem); font-weight: 500; letter-spacing: -.04em; line-height: .98; }
+.process-item p { margin: 0; color: var(--beige-muted); font-size: 15px; line-height: 1.45; }
+.process-arrow { align-self: end; margin-top: auto; color: var(--coral); font-size: 23px; transition: transform 200ms var(--ease-out); }
 .process-item:hover .process-arrow { transform: translate(5px, 5px); }
 
 .industries-section { background: var(--brown); overflow: hidden; }
@@ -163,7 +163,7 @@ img { display: block; max-width: 100%; }
 .industry-heading .section-label { grid-column: 1; grid-row: 1; align-self: center; }
 .industry-heading h2 { grid-column: 2 / -1; grid-row: 1; margin-bottom: 0; font-size: clamp(3.25rem, 6.25vw, 5.85rem); font-weight: 600; line-height: .88; }
 .industry-heading > p:last-child { grid-column: 3; grid-row: 2; max-width: 31ch; margin: 20px 0 0; color: var(--beige-muted); font-size: 15px; line-height: 1.48; }
-.industry-field { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(56px, 8vw, 100px); border-top: 1px solid var(--line); }
+.industry-field { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(28px, 3vw, 48px); border-top: 1px solid var(--line); }
 .industry-row { display: flex; flex-direction: column; justify-content: space-between; min-height: 172px; padding: 22px clamp(18px, 2.5vw, 36px); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: color 180ms ease, background 180ms ease; }
 .industry-row:nth-child(3n + 1) { padding-left: 0; }.industry-row:nth-child(3n) { padding-right: 0; border-right: 0; }
 .industry-row:hover { background: color-mix(in srgb, var(--coral) 11%, transparent); color: var(--coral); }
