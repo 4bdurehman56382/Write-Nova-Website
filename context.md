@@ -28,7 +28,7 @@ Mobile QA in August 2026 covered 375 px, 390 px, 428 px, and 844 px landscape li
 
 - Astro + TypeScript with native CSS.
 - Vercel adapter for server-route support and deployment.
-- GitHub remote: `https://github.com/4bdurehman56382/Write-Nova-Website.git` (private). It is connected locally but the current CMS work has not yet been committed or pushed.
+- GitHub remote: `https://github.com/4bdurehman56382/Write-Nova-Website.git` (private). The current CMS work is committed and pushed on `main` as `557067e`.
 - The enquiry form posts to the private `/api/contact` server endpoint, which sends through Brevo's transactional API. Production environment variables are configured with `coldplay56382@gmail.com` as the temporary sender, `4bdurehman56382@gmail.com` as the recipient, and the visitor's email as Reply-To. The Brevo sender must be verified before delivery will succeed; an external delivery test has not yet been run. FormSubmit is no longer used.
 - The CMS uses Decap CMS at `/admin`. It is free, signs editors in through GitHub, and commits the editable `src/content/website.json` file to the connected repository. Vercel then redeploys the site automatically. It exposes all editable client content in a single structured editor: Website settings, Services, Why WriteNova benefits, Process steps, Industries, and FAQs. `CMS_SETUP.md` contains the one-time GitHub OAuth and Vercel connection steps.
 - Basic SEO metadata, canonical and Open Graph URLs, and semantic structure are defined in `src/layouts/BaseLayout.astro`. GA4 and Search Console hooks activate from public environment variables.
@@ -41,6 +41,7 @@ Mobile QA in August 2026 covered 375 px, 390 px, 428 px, and 844 px landscape li
 4. Optionally set `PUBLIC_GA_MEASUREMENT_ID` and `PUBLIC_GOOGLE_SITE_VERIFICATION` to activate GA4 and Search Console verification.
 5. Connect the GitHub repository to Vercel, create the GitHub OAuth app, and set the Decap CMS variables locally and in Vercel Production. See `CMS_SETUP.md` for the exact values and callback URL.
 6. Replace `https://writenova.com` in `astro.config.mjs` if the final domain differs.
+7. The August 13, 2026 Vercel Production deployment for commit `557067e` was blocked by Vercel before it entered a ready state and without build logs. Resolve the block in the Vercel project dashboard, then redeploy `main`.
 
 ## Useful commands
 
