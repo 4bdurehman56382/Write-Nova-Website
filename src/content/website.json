@@ -1,0 +1,149 @@
+{
+  "settings": {
+    "brandName": "WriteNova",
+    "seo": {
+      "title": "WriteNova — Content That Connects. Copy That Converts.",
+      "description": "High-quality content writing for businesses and agencies: SEO blogs, website copy, landing pages, email content, and white-label writing support."
+    },
+    "social": {
+      "whatsAppNumber": "",
+      "linkedInUrl": ""
+    },
+    "navigation": {
+      "home": "Home",
+      "services": "Services",
+      "why": "Why WriteNova",
+      "process": "How We Work",
+      "about": "About",
+      "industries": "Industries",
+      "faqs": "FAQs",
+      "contact": "Contact"
+    },
+    "hero": {
+      "kicker": "For businesses and agencies that want to be understood.",
+      "titleFirst": "Content that",
+      "titleAccent": "connects.",
+      "titleLast": "Copy that converts.",
+      "description": "High-quality content writing for businesses and agencies — from SEO blogs and website copy to landing pages, email content, and white-label content support.",
+      "primaryCta": "Let’s Talk About Your Project",
+      "secondaryCta": "View Our Services"
+    },
+    "servicesSection": {
+      "label": "The work",
+      "intro": "Eight focused services for the pages, campaigns, and research-led projects that make a business easier to understand.",
+      "titleFirst": "The right words,",
+      "titleAccent": "where they matter.",
+      "description": "One writing partner for the pages, messages, and long-form content that shape how people understand your business."
+    },
+    "whySection": {
+      "label": "Why WriteNova",
+      "titleFirst": "A clear voice is",
+      "titleAccent": "good business.",
+      "description": "Strong content is more than polished wording. It listens to the audience, holds the brand together, and makes the next step feel natural.",
+      "linkText": "Meet the thinking behind WriteNova"
+    },
+    "processSection": {
+      "label": "How we work",
+      "titleFirst": "Less back-and-forth.",
+      "titleAccent": "More forward motion.",
+      "description": "Five clear steps keep the brief, the writing, and the delivery moving in the same direction."
+    },
+    "industriesSection": {
+      "label": "Industries we serve",
+      "titleFirst": "Different fields.",
+      "titleAccent": "One clear signal.",
+      "description": "The project changes. The need for clarity does not. We adapt the research, tone, structure, and level of detail to the work in front of us."
+    },
+    "aboutSection": {
+      "label": "About WriteNova",
+      "titleFirst": "Writing that knows",
+      "titleAccent": "what it’s here to do.",
+      "paragraphOne": "WriteNova is a content writing agency helping businesses and agencies communicate with clarity and purpose. We provide SEO content, website copy, landing pages, email copy, research-based writing, and white-label content support.",
+      "paragraphTwo": "Our approach combines strong writing, research, brand understanding, and dependable project delivery.",
+      "ctaText": "Start a conversation"
+    },
+    "faqSection": {
+      "label": "FAQs",
+      "titleFirst": "Good questions.",
+      "titleAccent": "Clear answers.",
+      "description": "If yours isn’t here, send us the brief. We’ll point you in the right direction."
+    },
+    "contactSection": {
+      "label": "Start here",
+      "titleFirst": "Let’s talk about",
+      "titleAccent": "your project.",
+      "description": "Have a project in mind? Tell us a little about what you need, and our team will get back to you.",
+      "detailsPlaceholder": "Goals, audience, scope, preferred style — anything useful.",
+      "submitText": "Submit Project Inquiry",
+      "successMessage": "Thank you for contacting WriteNova. We’ve received your project details and will get back to you shortly.",
+      "sideNoteFirst": "Details make",
+      "sideNoteLast": "better work."
+    },
+    "form": {
+      "fullNameLabel": "Full Name",
+      "companyLabel": "Business / Company Name",
+      "emailLabel": "Email Address",
+      "phoneLabel": "WhatsApp / Phone Number",
+      "countryLabel": "Country",
+      "serviceLabel": "Service Required",
+      "servicePlaceholder": "Choose a service",
+      "detailsLabel": "Project Details",
+      "budgetLabel": "Estimated Budget",
+      "deadlineLabel": "Expected Deadline",
+      "optionalLabel": "Optional"
+    },
+    "footer": {
+      "taglineFirst": "Content that connects.",
+      "taglineSecond": "Copy that converts.",
+      "projectLabel": "Start a project",
+      "projectTitleFirst": "Let’s make it",
+      "projectTitleLast": "clear.",
+      "privacyLabel": "Privacy policy available on request"
+    }
+  },
+  "services": [
+    { "title": "SEO Blog Writing", "copy": "Engaging, search-friendly blog content tailored to your audience, brand voice, and business goals.", "tag": "Search with substance" },
+    { "title": "Website Copy", "copy": "Clear, persuasive website content that communicates your value and builds trust.", "tag": "Words that clarify" },
+    { "title": "Landing Page Copy", "copy": "Conversion-focused copy designed to communicate benefits clearly and encourage action.", "tag": "Built to move" },
+    { "title": "Email Copy", "copy": "Professional content for marketing campaigns, newsletters, promotions, and customer communication.", "tag": "Keep the conversation moving" },
+    { "title": "White-Label Content Writing", "copy": "Behind-the-scenes content support for agencies that need additional writing capacity under their own brand.", "tag": "Quietly dependable" },
+    { "title": "B2B & SaaS Content", "copy": "Research-driven content that explains complex products and services clearly.", "tag": "Complex, made clear" },
+    { "title": "Medical & Research-Based Writing", "copy": "Well-structured, research-focused articles and educational content for suitable medical and research topics.", "tag": "Carefully researched" },
+    { "title": "PR & Press Release Writing", "copy": "Professional press releases and PR-focused content. Media placement, where available, is quoted separately.", "tag": "A message worth noticing" }
+  ],
+  "reasons": [
+    { "text": "Human-written, audience-focused content" },
+    { "text": "SEO-friendly structure and readability" },
+    { "text": "Content tailored to your brand voice" },
+    { "text": "Reliable turnaround and clear communication" },
+    { "text": "One-off or ongoing content support" },
+    { "text": "White-label support for agencies" },
+    { "text": "Trusted network of specialist writers for projects requiring additional expertise" }
+  ],
+  "process": [
+    { "title": "Tell Us What You Need", "copy": "Share your project, goals, audience, style, and deadline." },
+    { "title": "Understand Your Brand", "copy": "We review your brief, brand voice, references, and objectives." },
+    { "title": "Writing & Research", "copy": "The assigned writer researches and creates content according to the brief." },
+    { "title": "Review & Refinement", "copy": "Content is quality-checked and revised within the agreed scope." },
+    { "title": "Delivery", "copy": "Final content is delivered in the agreed format and timeline." }
+  ],
+  "industries": [
+    { "title": "Marketing & Advertising" },
+    { "title": "SaaS & Technology" },
+    { "title": "E-commerce" },
+    { "title": "Professional Services" },
+    { "title": "Healthcare & Medical" },
+    { "title": "Real Estate" },
+    { "title": "Education" },
+    { "title": "Hospitality & Lifestyle" },
+    { "title": "Startups & Growing Businesses" }
+  ],
+  "faqs": [
+    { "question": "Do you work with agencies?", "answer": "Yes. We provide white-label content support for agencies that need reliable additional writing capacity." },
+    { "question": "Can you match our brand voice?", "answer": "Yes. Content is tailored to the brand guidelines, tone, audience, and objectives in the brief." },
+    { "question": "Do you offer ongoing content support?", "answer": "Yes. We can support recurring blogs, website updates, campaigns, and other ongoing content." },
+    { "question": "Can I request revisions?", "answer": "Yes. Revisions are handled according to the agreed project scope." },
+    { "question": "How do you price projects?", "answer": "Pricing depends on content type, word count, research, complexity, and turnaround. A custom quote is provided after reviewing the brief." },
+    { "question": "Do you provide PR/media placement?", "answer": "We provide PR and press release writing. Media placement, where available, is quoted separately." }
+  ]
+}

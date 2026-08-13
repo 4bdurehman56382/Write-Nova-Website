@@ -6,7 +6,7 @@ Design One is now the active root project. The former Design Two implementation,
 
 The services section was compacted in August 2026: the dark service overview sidebar was removed and all eight service cards now use the full section width in a four-column, two-row desktop grid. It falls back to two columns below tablet width so the full service descriptions remain readable. The changes are live on Vercel Production.
 
-The Why WriteNova, process, industries, and footer areas were redesigned and deployed to Vercel Production in August 2026. Why WriteNova uses an open two-column benefit grid rather than a contained card; the process uses full-width step rows; industries use the original numbered three-column field with a larger, 600-weight two-line heading; and the footer is a simplified sign-off with one large project CTA. At mobile widths these areas collapse to a clear single-column reading flow.
+The Why WriteNova, process, industries, and footer areas were redesigned and deployed to Vercel Production in August 2026. Why WriteNova now pairs a wider display statement with a numbered vertical benefit list; the process uses five bordered panels on desktop; industries use the original numbered three-column field with a larger, 600-weight two-line heading and a tighter link to its supporting copy; and the footer is a simplified sign-off with one large project CTA. At mobile widths these areas collapse to a clear single-column reading flow.
 
 Mobile QA in August 2026 covered 375 px, 390 px, 428 px, and 844 px landscape live-browser viewports with no horizontal overflow or clipped primary content. The latest redesigned Why WriteNova, process, and industries areas were rechecked locally at 390 px with a matching 390 px document width; the current industry index was also checked at 1440 px. The 320 px layout, expanded navigation, services, and inquiry sections also fit visually; headless Chrome shows a 16 px scrollbar artifact at that width because its reserved desktop scrollbar combines with the enforced `320px` minimum body width. Confirm the final experience on a physical iOS and Android device before launch.
 
@@ -28,7 +28,9 @@ Mobile QA in August 2026 covered 375 px, 390 px, 428 px, and 844 px landscape li
 
 - Astro + TypeScript with native CSS.
 - Vercel adapter for server-route support and deployment.
+- GitHub remote: `https://github.com/4bdurehman56382/Write-Nova-Website.git` (private). It is connected locally but the current CMS work has not yet been committed or pushed.
 - The enquiry form posts to the private `/api/contact` server endpoint, which sends through Brevo's transactional API. Production environment variables are configured with `coldplay56382@gmail.com` as the temporary sender, `4bdurehman56382@gmail.com` as the recipient, and the visitor's email as Reply-To. The Brevo sender must be verified before delivery will succeed; an external delivery test has not yet been run. FormSubmit is no longer used.
+- The CMS uses Decap CMS at `/admin`. It is free, signs editors in through GitHub, and commits the editable `src/content/website.json` file to the connected repository. Vercel then redeploys the site automatically. It exposes all editable client content in a single structured editor: Website settings, Services, Why WriteNova benefits, Process steps, Industries, and FAQs. `CMS_SETUP.md` contains the one-time GitHub OAuth and Vercel connection steps.
 - Basic SEO metadata, canonical and Open Graph URLs, and semantic structure are defined in `src/layouts/BaseLayout.astro`. GA4 and Search Console hooks activate from public environment variables.
 
 ## Required launch configuration
@@ -37,7 +39,7 @@ Mobile QA in August 2026 covered 375 px, 390 px, 428 px, and 844 px landscape li
 2. Verify `coldplay56382@gmail.com` as a sender in Brevo, then run a delivery test. Before launch, replace it with the final verified company sender and update `BREVO_FROM_EMAIL` in Vercel Production.
 3. Add real `PUBLIC_WHATSAPP_NUMBER` and `PUBLIC_LINKEDIN_URL` to activate the social links. Until then they safely direct visitors to the inquiry form.
 4. Optionally set `PUBLIC_GA_MEASUREMENT_ID` and `PUBLIC_GOOGLE_SITE_VERIFICATION` to activate GA4 and Search Console verification.
-5. The brief requests an easy-to-edit CMS. Design One does not include a CMS, so this remains a separate implementation decision.
+5. Connect the GitHub repository to Vercel, create the GitHub OAuth app, and set the Decap CMS variables locally and in Vercel Production. See `CMS_SETUP.md` for the exact values and callback URL.
 6. Replace `https://writenova.com` in `astro.config.mjs` if the final domain differs.
 
 ## Useful commands
@@ -45,6 +47,7 @@ Mobile QA in August 2026 covered 375 px, 390 px, 428 px, and 844 px landscape li
 - `npm run dev` — local website preview.
 - `npm run check` — Astro / TypeScript validation.
 - `npm run build` — production build.
+- CMS content is stored in `src/content/website.json`; use `/admin` after completing `CMS_SETUP.md` to edit it safely.
 
 ## Working agreement
 

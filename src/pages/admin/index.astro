@@ -1,0 +1,135 @@
+---
+const repository = import.meta.env.PUBLIC_DECAP_GITHUB_REPO ?? '';
+const branch = import.meta.env.PUBLIC_DECAP_GITHUB_BRANCH ?? 'main';
+const oauthBaseUrl = (import.meta.env.PUBLIC_DECAP_OAUTH_BASE_URL ?? '').replace(/\/$/, '');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>WriteNova content editor</title>
+    <script is:inline>window.CMS_MANUAL_INIT = true;</script>
+    <script is:inline src="https://unpkg.com/decap-cms@3.13.0/dist/decap-cms.js"></script>
+  </head>
+  <body>
+    <main id="cms-setup" hidden={Boolean(repository)}>
+      <h1>WriteNova CMS needs its GitHub connection</h1>
+      <p>Add <code>PUBLIC_DECAP_GITHUB_REPO</code> and deploy again. The setup steps are in <code>CMS_SETUP.md</code>.</p>
+    </main>
+
+    <script is:inline define:vars={{ repository, branch, oauthBaseUrl }}>
+      const string = (label, name, options = {}) => ({ label, name, widget: 'string', ...options });
+      const text = (label, name, options = {}) => ({ label, name, widget: 'text', ...options });
+      const object = (label, name, fields) => ({ label, name, widget: 'object', fields });
+      const list = (label, name, fields, summary) => ({ label, name, widget: 'list', fields, ...(summary ? { summary } : {}) });
+
+      const headingFields = [
+        string('Section label', 'label'),
+        string('Heading — first line', 'titleFirst', { required: true }),
+        string('Heading — orange line', 'titleAccent', { required: true }),
+      ];
+
+      const section = (label, name, fields) => object(label, name, [...headingFields, ...fields]);
+
+      const settingsFields = [
+        string('Brand name', 'brandName', { required: true }),
+        object('SEO', 'seo', [
+          string('Page title', 'title', { required: true }),
+          text('Meta description', 'description', { required: true }),
+        ]),
+        object('Social links', 'social', [
+          string('WhatsApp number', 'whatsAppNumber', { hint: 'Digits only, including country code.' }),
+          string('LinkedIn URL', 'linkedInUrl'),
+        ]),
+        object('Navigation labels', 'navigation', [
+          string('Home', 'home'), string('Services', 'services'), string('Why WriteNova', 'why'), string('How we work', 'process'),
+          string('About', 'about'), string('Industries', 'industries'), string('FAQs', 'faqs'), string('Contact', 'contact'),
+        ]),
+        object('Hero', 'hero', [
+          string('Kicker', 'kicker'),
+          string('Heading — first line', 'titleFirst', { required: true }),
+          string('Heading — orange line', 'titleAccent', { required: true }),
+          string('Heading — final line', 'titleLast', { required: true }),
+          text('Description', 'description', { required: true }),
+          string('Primary button', 'primaryCta', { required: true }),
+          string('Secondary button', 'secondaryCta', { required: true }),
+        ]),
+        section('Services section', 'servicesSection', [
+          text('Left introduction', 'intro'), text('Heading description', 'description'),
+        ]),
+        section('Why WriteNova section', 'whySection', [
+          text('Description', 'description'), string('About link text', 'linkText'),
+        ]),
+        section('How we work section', 'processSection', [text('Supporting description', 'description')]),
+        section('Industries section', 'industriesSection', [text('Description', 'description')]),
+        section('About section', 'aboutSection', [
+          text('First paragraph', 'paragraphOne'), text('Second paragraph', 'paragraphTwo'), string('Button text', 'ctaText'),
+        ]),
+        section('FAQs section', 'faqSection', [text('Description', 'description')]),
+        section('Contact section', 'contactSection', [
+          text('Description', 'description'), string('Project details placeholder', 'detailsPlaceholder'),
+          string('Submit button text', 'submitText'), text('Success message', 'successMessage'),
+          string('Side-note first line', 'sideNoteFirst'), string('Side-note final line', 'sideNoteLast'),
+        ]),
+        object('Contact form labels', 'form', [
+          string('Full name', 'fullNameLabel'), string('Company name', 'companyLabel'), string('Email address', 'emailLabel'),
+          string('Phone number', 'phoneLabel'), string('Country', 'countryLabel'), string('Service required', 'serviceLabel'),
+          string('Service placeholder', 'servicePlaceholder'), string('Project details', 'detailsLabel'),
+          string('Budget', 'budgetLabel'), string('Deadline', 'deadlineLabel'), string('Optional label', 'optionalLabel'),
+        ]),
+        object('Footer', 'footer', [
+          string('Tagline — first line', 'taglineFirst'), string('Tagline — second line', 'taglineSecond'),
+          string('Project label', 'projectLabel'), string('Project heading — first line', 'projectTitleFirst'),
+          string('Project heading — final line', 'projectTitleLast'), string('Privacy link label', 'privacyLabel'),
+        ]),
+      ];
+
+      if (repository) {
+        const baseUrl = oauthBaseUrl || window.location.origin;
+        window.CMS.init({
+          config: {
+            load_config_file: false,
+            backend: {
+              name: 'github',
+              repo: repository,
+              branch,
+              auth_scope: 'repo',
+              site_domain: window.location.host,
+              base_url: baseUrl,
+              auth_endpoint: 'oauth',
+              commit_messages: { update: 'content: update WriteNova website' },
+            },
+            collections: [{
+              name: 'website',
+              label: 'Website content',
+              editor: { preview: false },
+              files: [{
+                name: 'content',
+                label: 'Edit website content',
+                file: 'src/content/website.json',
+                format: 'json',
+                fields: [
+                  object('Site settings', 'settings', settingsFields),
+                  list('Services', 'services', [
+                    string('Service name', 'title', { required: true }), string('Short tag', 'tag', { required: true }), text('Description', 'copy', { required: true }),
+                  ], '{{fields.title}}'),
+                  list('Why WriteNova benefits', 'reasons', [string('Benefit', 'text', { required: true })], '{{fields.text}}'),
+                  list('Process steps', 'process', [
+                    string('Step title', 'title', { required: true }), text('Step description', 'copy', { required: true }),
+                  ], '{{fields.title}}'),
+                  list('Industries', 'industries', [string('Industry', 'title', { required: true })], '{{fields.title}}'),
+                  list('FAQs', 'faqs', [
+                    string('Question', 'question', { required: true }), text('Answer', 'answer', { required: true }),
+                  ], '{{fields.question}}'),
+                ],
+              }],
+            }],
+          },
+        });
+      }
+    </script>
+  </body>
+</html>

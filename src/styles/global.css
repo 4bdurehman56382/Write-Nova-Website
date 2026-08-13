@@ -132,16 +132,15 @@ img { display: block; max-width: 100%; }
 .reason-section { overflow: hidden; background: var(--ink-soft); }
 .reason-atmosphere { position: absolute; right: -16rem; bottom: -18rem; width: 52rem; height: 52rem; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--coral) 35%, transparent), transparent 67%); filter: blur(10px); }
 .reason-layout, .faq-layout, .contact-layout { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: clamp(44px, 8vw, 130px); }
-.reason-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); align-items: center; }
+.reason-layout { grid-template-columns: minmax(0, 1.1fr) minmax(420px, .9fr); align-items: start; gap: clamp(40px, 5vw, 80px); }
 .reason-copy, .industries-copy, .faq-intro { align-self: start; }
+.reason-copy h2 { margin-bottom: 28px; font-size: clamp(3.55rem, 5.5vw, 5.5rem); font-weight: 600; line-height: .9; }
 .reason-copy > p:not(.section-label), .industries-copy > p:not(.section-label), .faq-intro > p:not(.section-label), .contact-copy > p:not(.section-label) { max-width: 44ch; color: var(--beige-muted); font-size: 17px; }
 .text-link { display: inline-flex; gap: 9px; margin-top: 10px; color: var(--coral); font-size: 14px; font-weight: 600; transition: gap 180ms var(--ease-out); }
 .text-link:hover { gap: 14px; }
-.reason-list { display: grid; grid-template-columns: 1fr 1fr; align-self: stretch; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
-.reason-list li { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-content: end; min-height: 118px; padding: 22px 14px 20px 0; border-bottom: 1px solid var(--line); color: var(--beige); }
-.reason-list li:nth-child(odd) { padding-right: clamp(22px, 3vw, 48px); border-right: 1px solid var(--line); }
-.reason-list li:nth-child(even) { padding-left: clamp(22px, 3vw, 48px); }
-.reason-list p { margin: 0; font-size: clamp(1rem, 1.35vw, 1.22rem); font-weight: 500; letter-spacing: -.03em; line-height: 1.08; }
+.reason-list { align-self: start; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.reason-list li, .reason-list li:nth-child(n) { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 16px; align-items: center; min-height: 78px; padding: 18px 0; border-right: 0; border-bottom: 1px solid var(--line); color: var(--beige); }
+.reason-list p { max-width: 25ch; margin: 0; font-size: clamp(1.1rem, 1.45vw, 1.34rem); font-weight: 500; letter-spacing: -.035em; line-height: 1.08; }
 .reason-list span { color: var(--coral); font-size: 10px; font-weight: 600; }
 
 .process-section { background: var(--ink); }
