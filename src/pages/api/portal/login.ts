@@ -14,14 +14,17 @@ const respond = (status: number, body: Record<string, string | boolean>) => new 
   headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' },
 });
 
-const redirectToPortal = (request: Request, search = '') => Response.redirect(new URL(`/portal${search}`, request.url), 303);
+const redirectToPortal = (search = '') => new Response(null, {
+  status: 303,
+  headers: { Location: `/portal${search}`, 'Cache-Control': 'no-store' },
+});
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   const acceptsJson = request.headers.get('accept')?.includes('application/json') ?? false;
   if (!isPortalConfigured()) {
     return acceptsJson
       ? respond(503, { ok: false, message: 'The content portal has not been connected yet.' })
-      : redirectToPortal(request, '?error=setup');
+      : redirectToPortal('?error=setup');
   }
 
   let body: Record<string, unknown>;
@@ -35,7 +38,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   } catch {
     return acceptsJson
       ? respond(400, { ok: false, message: 'Please enter your email and password.' })
-      : redirectToPortal(request, '?error=invalid-login');
+      : redirectToPortal('?error=invalid-login');
   }
 
   const email = typeof body.email === 'string' ? body.email.trim().toLowerCase().slice(0, 254) : '';
@@ -45,7 +48,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   if (!valid) {
     return acceptsJson
       ? respond(401, { ok: false, message: 'That email or password is not recognised.' })
-      : redirectToPortal(request, '?error=invalid-login');
+      : redirectToPortal('?error=invalid-login');
   }
 
   cookies.set(portalSessionCookie, createSession(email), {
@@ -56,5 +59,5 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     maxAge: sessionMaxAge,
   });
 
-  return acceptsJson ? respond(200, { ok: true, email }) : redirectToPortal(request);
+  return acceptsJson ? respond(200, { ok: true, email }) : redirectToPortal();
 };
