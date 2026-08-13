@@ -1,4 +1,5 @@
 import websiteContent from '../content/website.json';
+import { database, hasNeonDatabase } from './neon';
 
 export interface Service {
   title: string;
@@ -96,10 +97,42 @@ export interface WebsiteContent {
   faqs: Faq[];
 }
 
+export const fallbackContent = websiteContent as WebsiteContent;
+
+export const isWebsiteContent = (value: unknown): value is WebsiteContent => {
+  if (!value || typeof value !== 'object') return false;
+  const content = value as Partial<WebsiteContent>;
+  return Boolean(content.settings)
+    && Array.isArray(content.services)
+    && Array.isArray(content.reasons)
+    && Array.isArray(content.process)
+    && Array.isArray(content.industries)
+    && Array.isArray(content.faqs);
+};
+
 /**
- * Decap CMS writes to src/content/website.json. Astro includes that file in
- * each deployment, so published edits are reflected after Vercel redeploys.
+ * Published copy stays available from the checked-in approved brief until a
+ * Neon database is connected. Once connected, the client portal updates the
+ * single public content record without requiring a deployment.
  */
-export function getWebsiteContent(): WebsiteContent {
-  return websiteContent as WebsiteContent;
+export async function getWebsiteContent(): Promise<WebsiteContent> {
+  if (!hasNeonDatabase()) return fallbackContent;
+
+  try {
+    const rows = await database()`select content from website_content where id = 'website' limit 1` as Array<{ content?: unknown }>;
+    const content = rows[0]?.content;
+
+    return isWebsiteContent(content) ? content : fallbackContent;
+  } catch {
+    return fallbackContent;
+  }
+}
+
+export async function saveWebsiteContent(content: WebsiteContent) {
+  await database()`
+    insert into website_content (id, content, updated_at)
+    values ('website', ${JSON.stringify(content)}::jsonb, now())
+    on conflict (id) do update
+    set content = excluded.content, updated_at = now()
+  `;
 }

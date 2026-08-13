@@ -1,48 +1,46 @@
-# WriteNova CMS setup
+# WriteNova Content Portal setup
 
-WriteNova uses **Decap CMS**. It is free and stores the website’s editable content in `src/content/website.json` inside the GitHub repository. Editors use `https://your-site/admin`, save their changes, and Vercel publishes the new Git commit automatically.
+The website includes a private, WriteNova-branded editor at `/portal`. The client signs in with the email and password you choose. They do **not** need GitHub, and saving an edit updates the live website without a Git commit or Vercel redeployment.
 
-## One-time connection
+The portal uses [Neon](https://console.neon.tech) on its free plan. Neon holds the content; the website and portal connect through private Vercel server routes, so the database connection string never reaches the browser.
 
-1. The private repository is connected at [github.com/4bdurehman56382/Write-Nova-Website](https://github.com/4bdurehman56382/Write-Nova-Website). Push the local `main` branch before enabling the CMS, so Vercel and Decap have the source files to work with. Keep the repository private.
-2. In Vercel, connect that GitHub repository to the WriteNova project. Vercel will then deploy every change made through the CMS.
-3. In the GitHub account that owns the repository, create an OAuth app at [GitHub Developer Settings](https://github.com/settings/developers). Use:
+## One-time setup
 
-   - **Application name:** `WriteNova CMS`
-   - **Homepage URL:** `https://writenova-website.vercel.app`
-   - **Authorization callback URL:** `https://writenova-website.vercel.app/oauth/callback`
+1. Create a free Neon project at [console.neon.tech](https://console.neon.tech). In the project dashboard, select **Connect** and copy the pooled connection string. It starts with `postgresql://`.
+2. Open Neon’s **SQL Editor**, create a query, paste the full contents of [`neon/schema.sql`](./neon/schema.sql), and click **Run**. This creates the single content record used by the site.
+3. Choose the login name (an email address is recommended) and strong password the client will use for `/portal`. Generate a secure password hash locally:
 
-   Use the final custom domain instead if it is already connected. Copy the OAuth app’s client ID and generate a client secret.
-
-4. Add the following environment variables locally and in Vercel **Production**. Do not expose either secret in a `PUBLIC_` variable or commit it to Git.
-
-   ```env
-   PUBLIC_DECAP_GITHUB_REPO=your-github-owner/your-repository
-   PUBLIC_DECAP_GITHUB_BRANCH=main
-   PUBLIC_DECAP_OAUTH_BASE_URL=https://writenova-website.vercel.app
-   GITHUB_OAUTH_CLIENT_ID=your-client-id
-   GITHUB_OAUTH_CLIENT_SECRET=your-client-secret
-   CMS_OAUTH_STATE_SECRET=a-long-random-secret
-   CMS_ALLOWED_ORIGINS=https://writenova-website.vercel.app,http://localhost:4321
+   ```bash
+   node scripts/hash-cms-password.mjs "your-strong-client-password"
    ```
 
-   Create the state secret with:
+   Copy the full line that starts `scrypt:`. It is a one-way hash, not the client’s actual password.
+4. Generate a session secret:
 
    ```bash
    openssl rand -hex 32
    ```
 
-5. Redeploy the site, then visit `https://writenova-website.vercel.app/admin`. Sign in with a GitHub account that has write access to the repository. Each save creates a clearly labelled `content: update WriteNova website` commit and triggers Vercel.
+5. In Vercel, add these four **Production** environment variables, then redeploy:
 
-## Editing content
+   ```env
+   DATABASE_URL=your-pooled-neon-connection-string
+   CMS_ADMIN_EMAIL=client@example.com
+   CMS_ADMIN_PASSWORD_HASH=scrypt:the-generated-full-password-hash
+   CMS_SESSION_SECRET=the-generated-session-secret
+   ```
 
-The single **Edit website content** entry includes all approved client-editable content:
+   Do not use `PUBLIC_` on any of these values. Do not commit the connection string, password hash, or session secret to Git.
+6. Open `https://writenova-website.vercel.app/portal`, sign in using the client email and password, confirm the starting copy, then click **Save changes** once. That first save places the approved website content in Neon.
 
-- SEO, social links, navigation, hero, every section heading and description, contact copy, and footer copy.
-- Services, Why WriteNova benefits, process steps, industries, and FAQs. Drag list entries to change their display order.
+## Editing the website
 
-The admin dashboard is intentionally not linked from the public website. Share `/admin` only with people who are allowed to edit the repository.
+Open `/portal` and sign in. The left navigation separates core settings, page copy, services, benefits, process, industries, FAQs, and contact/footer content. Add or remove list entries directly. Press **Save changes** to publish your edit.
 
-## Local editing
+The portal is intentionally not linked in the public navigation. Share its link and password only with people who are allowed to change the website.
 
-Use production `/admin` for normal editing. For local CMS login, keep `PUBLIC_DECAP_OAUTH_BASE_URL` pointing to the deployed production site and add `http://localhost:4321` to `CMS_ALLOWED_ORIGINS`. The deployed OAuth callback safely returns the sign-in result to the local editor, so the GitHub OAuth app’s callback URL can remain on the production site.
+## Changing access
+
+To change the client password, generate a new `CMS_ADMIN_PASSWORD_HASH` with the script above, update that Vercel environment variable, and redeploy. To change their login name, update `CMS_ADMIN_EMAIL` and redeploy. This setup uses one editor account; it is deliberate for a single-client website and keeps the login simple.
+
+The old `/admin` address redirects to `/portal` for convenience. After the Neon portal is deployed and working, remove the unused Decap/GitHub OAuth environment variables from Vercel and delete the old GitHub OAuth app.

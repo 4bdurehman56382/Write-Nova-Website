@@ -1,0 +1,415 @@
+---
+import logoUrl from '../../Assets/writenova-mark.svg';
+import { fallbackContent } from '../lib/cms';
+import '../styles/portal.css';
+
+const portalConfigured = Boolean(
+  import.meta.env.DATABASE_URL
+  && import.meta.env.CMS_ADMIN_EMAIL
+  && import.meta.env.CMS_ADMIN_PASSWORD_HASH
+  && import.meta.env.CMS_SESSION_SECRET,
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#161316" />
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" />
+    <title>WriteNova Content Portal</title>
+  </head>
+  <body class="portal-body">
+    <main class="portal-shell" data-portal-shell>
+      <header class="portal-header">
+        <a class="portal-brand" href="/" aria-label="Return to WriteNova website">
+          <img src={logoUrl.src} alt="" width="32" height="32" />
+          <span>Write<span>Nova</span></span>
+        </a>
+        <p>Content portal</p>
+      </header>
+
+      <section class="portal-setup" data-portal-setup hidden>
+        <p class="portal-eyebrow">One-time connection</p>
+        <h1>Your content portal is almost ready.</h1>
+        <p>Connect the Neon database and secure portal credentials listed in <code>CMS_SETUP.md</code>, then return here to sign in.</p>
+      </section>
+
+      <section class="portal-auth" data-portal-auth>
+        <div class="portal-auth-copy">
+          <p class="portal-eyebrow">WriteNova content</p>
+          <h1>Make the next update feel simple.</h1>
+          <p>Sign in with the email and password supplied by your WriteNova team. Your website stays live while you work.</p>
+          <a href="/" class="portal-back">← Back to website</a>
+        </div>
+        <form class="portal-login" data-login-form>
+          <div>
+            <label for="portal-email">Email address or username</label>
+            <input id="portal-email" name="email" type="text" autocomplete="username" required />
+          </div>
+          <div>
+            <label for="portal-password">Password</label>
+            <input id="portal-password" name="password" type="password" autocomplete="current-password" required />
+          </div>
+          <p class="portal-message" data-login-message aria-live="polite"></p>
+          <button type="submit" class="portal-primary" data-login-button>Sign in <span aria-hidden="true">↗</span></button>
+        </form>
+      </section>
+
+      <section class="portal-editor" data-portal-editor hidden aria-label="Website content editor">
+        <aside class="portal-sidebar">
+          <div class="portal-account">
+            <span class="portal-account-dot" aria-hidden="true"></span>
+            <span data-portal-user>Signed in</span>
+          </div>
+          <nav class="portal-nav" aria-label="Content editor sections" data-portal-nav></nav>
+          <button type="button" class="portal-signout" data-signout>Sign out</button>
+        </aside>
+        <div class="portal-workspace">
+          <header class="portal-workspace-header">
+            <div>
+              <p class="portal-eyebrow" data-portal-kicker>Website content</p>
+              <h1 data-portal-title>Overview</h1>
+            </div>
+            <div class="portal-save-area">
+              <p class="portal-save-status" data-save-status aria-live="polite">All changes saved</p>
+              <button type="button" class="portal-primary" data-save-button>Save changes <span aria-hidden="true">↗</span></button>
+            </div>
+          </header>
+          <div class="portal-editor-body" data-portal-content></div>
+        </div>
+      </section>
+    </main>
+
+    <script is:inline define:vars={{ portalConfigured, fallbackContent }}>
+      const setupView = document.querySelector('[data-portal-setup]');
+      const authView = document.querySelector('[data-portal-auth]');
+      const editorView = document.querySelector('[data-portal-editor]');
+      const loginForm = document.querySelector('[data-login-form]');
+      const loginMessage = document.querySelector('[data-login-message]');
+      const loginButton = document.querySelector('[data-login-button]');
+      const nav = document.querySelector('[data-portal-nav]');
+      const editorContent = document.querySelector('[data-portal-content]');
+      const editorTitle = document.querySelector('[data-portal-title]');
+      const editorKicker = document.querySelector('[data-portal-kicker]');
+      const saveButton = document.querySelector('[data-save-button]');
+      const saveStatus = document.querySelector('[data-save-status]');
+      const portalUser = document.querySelector('[data-portal-user]');
+      const signoutButton = document.querySelector('[data-signout]');
+
+      const cloneContent = () => JSON.parse(JSON.stringify(fallbackContent));
+      const state = { content: cloneContent(), active: 'overview', user: null, dirty: false, remoteExists: false };
+
+      const tabs = [
+        { key: 'overview', label: 'Overview', kicker: 'Website content' },
+        { key: 'identity', label: 'Brand & navigation', kicker: 'Core settings' },
+        { key: 'hero', label: 'Hero & section copy', kicker: 'Page messaging' },
+        { key: 'services', label: 'Services', kicker: 'Service list' },
+        { key: 'reasons', label: 'Why WriteNova', kicker: 'Benefits list' },
+        { key: 'process', label: 'How we work', kicker: 'Process list' },
+        { key: 'industries', label: 'Industries', kicker: 'Industry list' },
+        { key: 'faqs', label: 'FAQs', kicker: 'Questions & answers' },
+        { key: 'contact', label: 'Contact & footer', kicker: 'Inquiry and footer' },
+      ];
+
+      function el(tag, options = {}, children = []) {
+        const node = document.createElement(tag);
+        Object.entries(options).forEach(([key, value]) => {
+          if (key === 'className') node.className = value;
+          else if (key === 'text') node.textContent = value;
+          else if (key.startsWith('data-')) node.setAttribute(key, value);
+          else node[key] = value;
+        });
+        children.filter(Boolean).forEach((child) => node.append(child));
+        return node;
+      }
+
+      function getPath(path) {
+        return path.split('.').reduce((value, part) => value?.[part], state.content);
+      }
+
+      function setPath(path, value) {
+        const parts = path.split('.');
+        const last = parts.pop();
+        const target = parts.reduce((item, part) => item[part], state.content);
+        target[last] = value;
+      }
+
+      function markDirty() {
+        state.dirty = true;
+        saveStatus.textContent = 'Unsaved changes';
+        saveStatus.className = 'portal-save-status is-dirty';
+      }
+
+      function field(path, label, options = {}) {
+        const wrap = el('label', { className: `portal-field${options.wide ? ' is-wide' : ''}` });
+        wrap.append(el('span', { text: label }));
+        const control = options.multiline ? el('textarea', { rows: options.rows ?? 4 }) : el('input', { type: 'text' });
+        control.value = getPath(path) ?? '';
+        control.addEventListener('input', () => { setPath(path, control.value); markDirty(); });
+        wrap.append(control);
+        if (options.hint) wrap.append(el('small', { text: options.hint }));
+        return wrap;
+      }
+
+      function editorGroup(title, description, fields) {
+        const section = el('section', { className: 'portal-group' });
+        const heading = el('div', { className: 'portal-group-heading' });
+        heading.append(el('h2', { text: title }));
+        if (description) heading.append(el('p', { text: description }));
+        section.append(heading, el('div', { className: 'portal-fields' }, fields));
+        return section;
+      }
+
+      function listEditor(path, title, description, fields) {
+        const section = el('section', { className: 'portal-list-editor' });
+        const heading = el('div', { className: 'portal-group-heading' });
+        heading.append(el('h2', { text: title }));
+        heading.append(el('p', { text: description }));
+        const add = el('button', { type: 'button', className: 'portal-secondary', text: 'Add item +' });
+        add.addEventListener('click', () => {
+          getPath(path).push(Object.fromEntries(fields.map(({ name }) => [name, ''])));
+          markDirty(); renderEditor();
+        });
+        heading.append(add);
+        section.append(heading);
+        const rows = el('div', { className: 'portal-list-rows' });
+        getPath(path).forEach((_, index) => {
+          const row = el('article', { className: 'portal-list-row' });
+          const number = el('span', { className: 'portal-list-number', text: String(index + 1).padStart(2, '0') });
+          const rowFields = el('div', { className: 'portal-fields' });
+          fields.forEach(({ name, label, multiline }) => rowFields.append(field(`${path}.${index}.${name}`, label, { multiline, wide: Boolean(multiline), rows: 3 })));
+          const remove = el('button', { type: 'button', className: 'portal-remove', text: 'Remove' });
+          remove.addEventListener('click', () => {
+            getPath(path).splice(index, 1);
+            markDirty(); renderEditor();
+          });
+          row.append(number, rowFields, remove);
+          rows.append(row);
+        });
+        section.append(rows);
+        return section;
+      }
+
+      function renderOverview() {
+        const section = el('section', { className: 'portal-overview' });
+        section.append(el('p', { className: 'portal-lede', text: 'Everything on the public site is ready to edit here. Changes publish directly to the live website when you press Save.' }));
+        const steps = el('ol', { className: 'portal-overview-list' });
+        [
+          ['1', 'Choose a section', 'Use the navigation to find the copy or list you want to update.'],
+          ['2', 'Make your edit', 'Your changes stay in this portal until you choose to save.'],
+          ['3', 'Save to publish', 'The live website updates without GitHub or a redeployment.'],
+        ].forEach(([number, title, copy]) => {
+          const item = el('li');
+          item.append(el('span', { text: number }), el('strong', { text: title }), el('p', { text: copy }));
+          steps.append(item);
+        });
+        section.append(steps);
+        if (!state.remoteExists) section.append(el('p', { className: 'portal-notice', text: 'This is the approved starting content. Press Save once to publish it to your connected content portal.' }));
+        return section;
+      }
+
+      function renderIdentity() {
+        const fragment = document.createDocumentFragment();
+        fragment.append(editorGroup('Brand, SEO & social links', 'This controls the browser title, site description, and header/footer contact links.', [
+          field('settings.brandName', 'Brand name'), field('settings.seo.title', 'Page title'),
+          field('settings.seo.description', 'Meta description', { multiline: true, wide: true, rows: 3 }),
+          field('settings.social.whatsAppNumber', 'WhatsApp number', { hint: 'Digits only, including country code.' }),
+          field('settings.social.linkedInUrl', 'LinkedIn URL'),
+        ]));
+        fragment.append(editorGroup('Navigation labels', 'Short labels are best here, so the header remains easy to scan.', [
+          field('settings.navigation.home', 'Home'), field('settings.navigation.services', 'Services'),
+          field('settings.navigation.why', 'Why WriteNova'), field('settings.navigation.process', 'How we work'),
+          field('settings.navigation.about', 'About'), field('settings.navigation.industries', 'Industries'),
+          field('settings.navigation.faqs', 'FAQs'), field('settings.navigation.contact', 'Contact'),
+        ]));
+        return fragment;
+      }
+
+      function renderHeroCopy() {
+        const fragment = document.createDocumentFragment();
+        fragment.append(editorGroup('Hero', 'The main message at the top of the website.', [
+          field('settings.hero.kicker', 'Kicker', { wide: true }), field('settings.hero.titleFirst', 'Heading — first line'),
+          field('settings.hero.titleAccent', 'Heading — coral line'), field('settings.hero.titleLast', 'Heading — final line'),
+          field('settings.hero.description', 'Description', { multiline: true, wide: true }),
+          field('settings.hero.primaryCta', 'Primary button'), field('settings.hero.secondaryCta', 'Secondary button'),
+        ]));
+        const sections = [
+          ['servicesSection', 'Services section', ['label', 'intro', 'titleFirst', 'titleAccent', 'description']],
+          ['whySection', 'Why WriteNova section', ['label', 'titleFirst', 'titleAccent', 'description', 'linkText']],
+          ['processSection', 'How we work section', ['label', 'titleFirst', 'titleAccent', 'description']],
+          ['industriesSection', 'Industries section', ['label', 'titleFirst', 'titleAccent', 'description']],
+          ['aboutSection', 'About section', ['label', 'titleFirst', 'titleAccent', 'paragraphOne', 'paragraphTwo', 'ctaText']],
+          ['faqSection', 'FAQ section', ['label', 'titleFirst', 'titleAccent', 'description']],
+        ];
+        const labels = { label: 'Section label', intro: 'Supporting introduction', titleFirst: 'Heading — first line', titleAccent: 'Heading — coral line', description: 'Description', linkText: 'Link text', paragraphOne: 'First paragraph', paragraphTwo: 'Second paragraph', ctaText: 'Button text' };
+        sections.forEach(([key, title, names]) => {
+          const fields = names.map((name) => field(`settings.${key}.${name}`, labels[name], {
+            multiline: ['intro', 'description', 'paragraphOne', 'paragraphTwo'].includes(name),
+            wide: ['intro', 'description', 'paragraphOne', 'paragraphTwo'].includes(name),
+            rows: 4,
+          }));
+          fragment.append(editorGroup(title, '', fields));
+        });
+        return fragment;
+      }
+
+      function renderContact() {
+        const fragment = document.createDocumentFragment();
+        fragment.append(editorGroup('Contact section', 'The copy immediately beside the project inquiry form.', [
+          field('settings.contactSection.label', 'Section label'), field('settings.contactSection.titleFirst', 'Heading — first line'),
+          field('settings.contactSection.titleAccent', 'Heading — coral line'), field('settings.contactSection.description', 'Description', { multiline: true, wide: true }),
+          field('settings.contactSection.detailsPlaceholder', 'Project details placeholder', { wide: true }), field('settings.contactSection.submitText', 'Submit button text'),
+          field('settings.contactSection.successMessage', 'Success message', { multiline: true, wide: true }), field('settings.contactSection.sideNoteFirst', 'Side note — first line'), field('settings.contactSection.sideNoteLast', 'Side note — final line'),
+        ]));
+        fragment.append(editorGroup('Inquiry form labels', 'Keep these short and descriptive for visitors completing the form.', [
+          field('settings.form.fullNameLabel', 'Full name'), field('settings.form.companyLabel', 'Company name'), field('settings.form.emailLabel', 'Email address'),
+          field('settings.form.phoneLabel', 'Phone number'), field('settings.form.countryLabel', 'Country'), field('settings.form.serviceLabel', 'Service required'),
+          field('settings.form.servicePlaceholder', 'Service placeholder'), field('settings.form.detailsLabel', 'Project details'), field('settings.form.budgetLabel', 'Budget'),
+          field('settings.form.deadlineLabel', 'Deadline'), field('settings.form.optionalLabel', 'Optional label'),
+        ]));
+        fragment.append(editorGroup('Footer', '', [
+          field('settings.footer.taglineFirst', 'Tagline — first line'), field('settings.footer.taglineSecond', 'Tagline — second line'),
+          field('settings.footer.projectLabel', 'Project label'), field('settings.footer.projectTitleFirst', 'Project heading — first line'),
+          field('settings.footer.projectTitleLast', 'Project heading — final line'), field('settings.footer.privacyLabel', 'Privacy link label'),
+        ]));
+        return fragment;
+      }
+
+      function renderEditor() {
+        const activeTab = tabs.find((tab) => tab.key === state.active);
+        editorTitle.textContent = activeTab.label;
+        editorKicker.textContent = activeTab.kicker;
+        nav.replaceChildren();
+        tabs.forEach((tab) => {
+          const button = el('button', { type: 'button', text: tab.label, className: tab.key === state.active ? 'is-active' : '' });
+          button.addEventListener('click', () => { state.active = tab.key; renderEditor(); });
+          nav.append(button);
+        });
+        editorContent.replaceChildren();
+        if (state.active === 'overview') editorContent.append(renderOverview());
+        if (state.active === 'identity') editorContent.append(renderIdentity());
+        if (state.active === 'hero') editorContent.append(renderHeroCopy());
+        if (state.active === 'services') editorContent.append(listEditor('services', 'Services', 'Add, remove, or update the services shown on the website.', [{ name: 'title', label: 'Service name' }, { name: 'tag', label: 'Short tag' }, { name: 'copy', label: 'Description', multiline: true }]));
+        if (state.active === 'reasons') editorContent.append(listEditor('reasons', 'Why WriteNova benefits', 'These appear in the numbered benefit list.', [{ name: 'text', label: 'Benefit', multiline: true }]));
+        if (state.active === 'process') editorContent.append(listEditor('process', 'Process steps', 'These five steps describe how WriteNova works with a project.', [{ name: 'title', label: 'Step title' }, { name: 'copy', label: 'Step description', multiline: true }]));
+        if (state.active === 'industries') editorContent.append(listEditor('industries', 'Industries', 'Add, remove, or update the industries shown on the website.', [{ name: 'title', label: 'Industry name' }]));
+        if (state.active === 'faqs') editorContent.append(listEditor('faqs', 'Frequently asked questions', 'Clear answers help visitors know whether WriteNova is the right fit.', [{ name: 'question', label: 'Question' }, { name: 'answer', label: 'Answer', multiline: true }]));
+        if (state.active === 'contact') editorContent.append(renderContact());
+      }
+
+      async function portalRequest(path, options = {}) {
+        const headers = new Headers(options.headers || {});
+        headers.set('Accept', 'application/json');
+        return fetch(path, { ...options, headers, credentials: 'same-origin' });
+      }
+
+      async function loadContent() {
+        const response = await portalRequest('/api/portal/content');
+        if (!response.ok) throw new Error('The portal could not load the website content.');
+        const data = await response.json();
+        if (data.content) {
+          state.content = data.content;
+          state.remoteExists = true;
+        }
+      }
+
+      function showEditor(user) {
+        authView.hidden = true;
+        editorView.hidden = false;
+        portalUser.textContent = user.email;
+        renderEditor();
+      }
+
+      function setLoginMessage(message, isError = false) {
+        loginMessage.textContent = message;
+        loginMessage.className = `portal-message${isError ? ' is-error' : ''}`;
+      }
+
+      async function startSession(user) {
+        state.user = user;
+        await loadContent();
+        showEditor(user);
+      }
+
+      loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const form = new FormData(loginForm);
+        loginButton.disabled = true;
+        loginButton.textContent = 'Signing in…';
+        setLoginMessage('');
+        try {
+          const response = await portalRequest('/api/portal/login', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: form.get('email'), password: form.get('password') }),
+          });
+          const data = await response.json();
+          if (!response.ok || !data.email) throw new Error(data.message || 'That email or password is not recognised.');
+          await startSession(data);
+        } catch (error) {
+          setLoginMessage(error.message || 'Unable to sign in. Please try again.', true);
+        } finally {
+          loginButton.disabled = false;
+          loginButton.innerHTML = 'Sign in <span aria-hidden="true">↗</span>';
+        }
+      });
+
+      saveButton.addEventListener('click', async () => {
+        if (!state.user) return;
+        saveButton.disabled = true;
+        saveButton.textContent = 'Saving…';
+        saveStatus.textContent = 'Publishing your updates…';
+        saveStatus.className = 'portal-save-status';
+        try {
+          const response = await portalRequest('/api/portal/content', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: state.content }),
+          });
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.message || 'Your changes could not be saved. Please sign in again and retry.');
+          state.remoteExists = true;
+          state.dirty = false;
+          saveStatus.textContent = 'Published to the live website';
+          saveStatus.className = 'portal-save-status is-success';
+        } catch (error) {
+          saveStatus.textContent = error.message || 'Unable to save changes.';
+          saveStatus.className = 'portal-save-status is-error';
+        } finally {
+          saveButton.disabled = false;
+          saveButton.innerHTML = 'Save changes <span aria-hidden="true">↗</span>';
+        }
+      });
+
+      signoutButton.addEventListener('click', async () => {
+        await portalRequest('/api/portal/logout', { method: 'POST' });
+        state.user = null;
+        editorView.hidden = true;
+        authView.hidden = false;
+        loginForm.reset();
+        setLoginMessage('You have signed out.');
+      });
+
+      async function initialisePortal() {
+        if (!portalConfigured) {
+          setupView.hidden = false;
+          authView.hidden = true;
+          return;
+        }
+        try {
+          const response = await portalRequest('/api/portal/session');
+          if (!response.ok) return;
+          const user = await response.json();
+          if (user.email) await startSession(user);
+        } catch {
+          setLoginMessage('Please sign in to continue.');
+        }
+      }
+
+      initialisePortal();
+    </script>
+  </body>
+</html>
