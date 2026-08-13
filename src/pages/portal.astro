@@ -1,6 +1,7 @@
 ---
 import logoUrl from '../../Assets/writenova-mark.svg';
 import { fallbackContent } from '../lib/cms';
+import { getSessionEmail, portalSessionCookie } from '../lib/portal-auth';
 import '../styles/portal.css';
 
 const portalConfigured = Boolean(
@@ -10,6 +11,7 @@ const portalConfigured = Boolean(
   && import.meta.env.CMS_SESSION_SECRET,
 );
 const portalError = new URL(Astro.request.url).searchParams.get('error') ?? '';
+const authenticatedEmail = getSessionEmail(Astro.cookies.get(portalSessionCookie)?.value);
 ---
 
 <!doctype html>
@@ -39,7 +41,7 @@ const portalError = new URL(Astro.request.url).searchParams.get('error') ?? '';
         <p>Connect the Neon database and secure portal credentials listed in <code>CMS_SETUP.md</code>, then return here to sign in.</p>
       </section>
 
-      <section class="portal-auth" data-portal-auth>
+      <section class="portal-auth" data-portal-auth hidden={Boolean(authenticatedEmail)}>
         <div class="portal-auth-copy">
           <p class="portal-eyebrow">WriteNova content</p>
           <h1>Make the next update feel simple.</h1>
@@ -60,7 +62,7 @@ const portalError = new URL(Astro.request.url).searchParams.get('error') ?? '';
         </form>
       </section>
 
-      <section class="portal-editor" data-portal-editor hidden aria-label="Website content editor">
+      <section class="portal-editor" data-portal-editor hidden={!authenticatedEmail} aria-label="Website content editor">
         <aside class="portal-sidebar">
           <div class="portal-account">
             <span class="portal-account-dot" aria-hidden="true"></span>
@@ -85,7 +87,7 @@ const portalError = new URL(Astro.request.url).searchParams.get('error') ?? '';
       </section>
     </main>
 
-    <script is:inline define:vars={{ portalConfigured, portalError, fallbackContent }}>
+    <script is:inline define:vars={{ portalConfigured, portalError, authenticatedEmail, fallbackContent }}>
       const setupView = document.querySelector('[data-portal-setup]');
       const authView = document.querySelector('[data-portal-auth]');
       const editorView = document.querySelector('[data-portal-editor]');
@@ -330,8 +332,9 @@ const portalError = new URL(Astro.request.url).searchParams.get('error') ?? '';
 
       async function startSession(user) {
         state.user = user;
-        await loadContent();
         showEditor(user);
+        await loadContent();
+        renderEditor();
       }
 
       saveButton.addEventListener('click', async () => {
@@ -379,6 +382,10 @@ const portalError = new URL(Astro.request.url).searchParams.get('error') ?? '';
         if (portalError === 'invalid-login') setLoginMessage('That username or password is not recognised.', true);
         if (portalError === 'setup') setLoginMessage('The content portal has not been connected yet.', true);
         try {
+          if (authenticatedEmail) {
+            await startSession({ email: authenticatedEmail });
+            return;
+          }
           const response = await portalRequest('/api/portal/session');
           if (!response.ok) return;
           const user = await response.json();
