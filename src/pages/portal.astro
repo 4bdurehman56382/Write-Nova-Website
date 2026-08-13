@@ -348,7 +348,9 @@ const portalConfigured = Boolean(
           });
           const data = await response.json();
           if (!response.ok || !data.email) throw new Error(data.message || 'That email or password is not recognised.');
-          await startSession(data);
+          loginButton.textContent = 'Opening your portal…';
+          window.location.assign('/portal');
+          return;
         } catch (error) {
           setLoginMessage(error.message || 'Unable to sign in. Please try again.', true);
         } finally {
