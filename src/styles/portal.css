@@ -2,6 +2,7 @@
 
 .portal-body { min-width: 320px; margin: 0; background: #161316; color: #f2e5d4; font-family: 'General Sans', Arial, sans-serif; font-size: 16px; line-height: 1.45; }
 .portal-body *, .portal-body *::before, .portal-body *::after { box-sizing: border-box; }
+.portal-body [hidden] { display: none !important; }
 .portal-body button, .portal-body input, .portal-body textarea { font: inherit; }
 .portal-body button { cursor: pointer; }
 .portal-body button:disabled { cursor: wait; opacity: .72; }
@@ -17,9 +18,9 @@
 .portal-auth-copy > p:not(.portal-eyebrow), .portal-setup > p { max-width: 47ch; margin: 0; color: #cfc0ae; font-size: 17px; text-wrap: pretty; }
 .portal-back { display: inline-block; margin-top: 32px; color: #ff6d29; font-size: 14px; font-weight: 600; text-decoration: none; }
 .portal-login { display: grid; width: min(100%, 720px); justify-self: stretch; gap: 30px; padding: 44px; border: 1px solid rgba(242, 229, 212, .25); background: #211a1a; }
-.portal-login > div, .portal-field { display: grid; gap: 8px; }.portal-login label, .portal-field > span { color: #f2e5d4; font-size: 13px; font-weight: 600; }
+.portal-login > div, .portal-field { display: grid; gap: 8px; }.portal-login label, .portal-field > span { color: #f2e5d4; font-size: 13px; font-weight: 600; }.portal-login label { font-size: 16px; }
 .portal-login input, .portal-field input, .portal-field textarea { width: 100%; border: 1px solid rgba(242, 229, 212, .27); border-radius: 7px; background: #161316; color: #f2e5d4; transition: border-color 180ms ease, background 180ms ease; }
-.portal-login input { min-height: 54px; padding: 12px 14px; }.portal-field input { min-height: 44px; padding: 9px 11px; }.portal-field textarea { min-height: 112px; padding: 10px 11px; resize: vertical; }
+.portal-login input { min-height: 54px; padding: 12px 14px; font-size: 18px; }.portal-field input { min-height: 44px; padding: 9px 11px; }.portal-field textarea { min-height: 112px; padding: 10px 11px; resize: vertical; }
 .portal-login input:focus, .portal-field input:focus, .portal-field textarea:focus { border-color: #ff6d29; outline: none; background: rgba(255, 109, 41, .06); }
 .portal-message { min-height: 20px; margin: -7px 0 0; color: #cfc0ae; font-size: 13px; }.portal-message.is-error, .portal-save-status.is-error { color: #ff9c8b; }
 .portal-primary, .portal-secondary, .portal-remove, .portal-signout { border: 0; font-weight: 700; transition: background 180ms ease, color 180ms ease, transform 180ms cubic-bezier(.16, 1, .3, 1); }
