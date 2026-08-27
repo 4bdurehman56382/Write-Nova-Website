@@ -31,7 +31,7 @@ The portal uses [Neon](https://console.neon.tech) on its free plan. Neon holds t
    ```
 
    Do not use `PUBLIC_` on any of these values. Do not commit the connection string, password hash, or session secret to Git.
-6. Open `https://writenova-website.vercel.app/portal`, sign in using the client email and password, confirm the starting copy, then click **Save changes** once. That first save places the approved website content in Neon.
+6. Open `https://writenova-website-client.vercel.app/portal`, sign in using the client email and password, confirm the starting copy, then click **Save changes** once. That first save places the approved website content in Neon.
 
 ## Editing the website
 
