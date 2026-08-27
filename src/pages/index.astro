@@ -244,6 +244,15 @@ const hasLinkedInUrl = Boolean(settings.social.linkedInUrl || import.meta.env.PU
     <div class="shell footer-bottom"><span>© {new Date().getFullYear()} {settings.brandName}. All rights reserved.</span><a href="#contact">{settings.footer.privacyLabel}</a></div>
   </footer>
 
+  <a
+    class="whatsapp-sticky"
+    href={whatsAppUrl}
+    target={whatsAppNumber ? '_blank' : undefined}
+    rel={whatsAppNumber ? 'noreferrer' : undefined}
+    aria-label="Chat with WriteNova on WhatsApp"
+    title={whatsAppNumber ? 'Chat with WriteNova on WhatsApp' : 'Business WhatsApp number to be connected'}
+  ><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.05 0C5.48 0 .14 5.33.14 11.9c0 2.09.54 4.12 1.57 5.92L0 24l6.35-1.66a11.88 11.88 0 0 0 5.7 1.45h.01c6.56 0 11.9-5.33 11.9-11.9 0-3.18-1.24-6.16-3.46-8.4ZM12.05 21.8a9.9 9.9 0 0 1-5.05-1.39l-.36-.21-3.77.99 1-3.68-.24-.38a9.9 9.9 0 1 1 8.42 4.67Zm5.43-7.42c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.66.15-.2.3-.76.97-.93 1.17-.17.2-.35.22-.65.07-1.77-.88-2.94-1.57-4.11-3.56-.31-.53.31-.5.88-1.66.1-.2.05-.37-.02-.52-.08-.15-.66-1.59-.9-2.18-.24-.57-.49-.5-.66-.5h-.57c-.2 0-.52.08-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.47 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.5 1.89.82 2.63.9 3.58.76.58-.09 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/></svg></a>
+
   <script>
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const menuButton = document.querySelector('[data-menu-button]');

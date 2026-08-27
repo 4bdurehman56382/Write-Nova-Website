@@ -240,6 +240,9 @@ img { display: block; max-width: 100%; }
 .footer-socials svg { width: 15px; height: 15px; fill: currentColor; }
 .footer-bottom { display: flex; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--line); color: color-mix(in srgb, var(--beige) 47%, transparent); font-size: 11px; }
 .footer-bottom a:hover { color: var(--coral); }
+.whatsapp-sticky { position: fixed; z-index: 40; right: 22px; bottom: 22px; display: grid; width: 56px; height: 56px; place-items: center; border-radius: 50%; background: var(--coral); color: var(--ink); box-shadow: 0 10px 26px color-mix(in srgb, var(--ink) 45%, transparent); transition: transform 180ms var(--ease-out), background 180ms ease, box-shadow 180ms ease; }
+.whatsapp-sticky:hover, .whatsapp-sticky:focus-visible { background: var(--coral-hot); transform: translateY(-3px) scale(1.06); box-shadow: 0 14px 32px color-mix(in srgb, var(--ink) 50%, transparent); }
+.whatsapp-sticky svg { width: 26px; height: 26px; fill: currentColor; }
 
 .has-reveal-motion .reveal-group.is-visible { animation: group-in 680ms var(--ease-out) both; }
 .hero-intro { animation: hero-in 780ms var(--ease-out) both; }.hero-description { animation-delay: 110ms; }.hero-actions { animation-delay: 190ms; }
