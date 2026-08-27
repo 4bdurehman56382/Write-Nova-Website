@@ -104,6 +104,10 @@ Astro.response.headers.set('Cache-Control', 'no-store');
 
       const cloneContent = () => JSON.parse(JSON.stringify(fallbackContent));
       const state = { content: cloneContent(), active: 'overview', user: null, dirty: false, remoteExists: false };
+      const statsState = {
+        visits: { range: 'day', data: [], status: 'idle' },
+        submissions: { range: 'day', data: [], status: 'idle' },
+      };
 
       const tabs = [
         { key: 'overview', label: 'Overview', kicker: 'Website content' },
@@ -196,6 +200,79 @@ Astro.response.headers.set('Cache-Control', 'no-store');
         return section;
       }
 
+      const rangeLabels = { day: 'Daily', week: 'Weekly', month: 'Monthly' };
+
+      function barChart(dataset) {
+        const scroll = el('div', { className: 'portal-chart-scroll' });
+        const chart = el('div', { className: 'portal-chart' });
+        chart.style.minWidth = `${Math.max(dataset.length * 30, 100)}px`;
+        const max = Math.max(1, ...dataset.map((point) => point.count));
+        dataset.forEach((point) => {
+          const bar = el('div', { className: 'portal-chart-bar' });
+          bar.append(
+            el('span', { className: 'portal-chart-value', text: String(point.count) }),
+            el('span', { className: 'portal-chart-bar-fill', style: `height:${Math.max(2, Math.round((point.count / max) * 100))}%` }),
+            el('span', { className: 'portal-chart-label', text: point.label }),
+          );
+          chart.append(bar);
+        });
+        scroll.append(chart);
+        return scroll;
+      }
+
+      function renderPanelBody(panel) {
+        const body = document.querySelector(`[data-stats-panel="${panel}"] [data-stats-body]`);
+        const total = document.querySelector(`[data-stats-panel="${panel}"] [data-stats-total]`);
+        if (!body) return;
+        const { data, status } = statsState[panel];
+        if (status === 'error') {
+          body.replaceChildren(el('p', { className: 'portal-stats-message', text: 'This data could not be loaded.' }));
+          if (total) total.textContent = '';
+          return;
+        }
+        if (status === 'loading') {
+          body.replaceChildren(el('p', { className: 'portal-stats-message', text: 'Loading…' }));
+          if (total) total.textContent = '';
+          return;
+        }
+        if (total) total.textContent = `${data.reduce((sum, point) => sum + point.count, 0)} total`;
+        body.replaceChildren(barChart(data));
+      }
+
+      async function loadPanelStats(panel) {
+        statsState[panel].status = 'loading';
+        renderPanelBody(panel);
+        try {
+          const response = await portalRequest(`/api/portal/stats?range=${statsState[panel].range}`);
+          if (!response.ok) throw new Error('Stats request failed');
+          const data = await response.json();
+          statsState[panel].data = data[panel] || [];
+          statsState[panel].status = 'ready';
+        } catch {
+          statsState[panel].status = 'error';
+        }
+        renderPanelBody(panel);
+      }
+
+      function statsPanel(panel, title) {
+        const section = el('article', { className: 'portal-stats-panel', 'data-stats-panel': panel });
+        const head = el('div', { className: 'portal-stats-head' });
+        head.append(el('h3', { text: title }));
+        const controls = el('div', { className: 'portal-stats-controls' });
+        controls.append(el('span', { className: 'portal-stats-total', 'data-stats-total': '' }));
+        const select = el('select', { className: 'portal-stats-range' });
+        Object.entries(rangeLabels).forEach(([value, label]) => select.append(el('option', { value, text: label })));
+        select.value = statsState[panel].range;
+        select.addEventListener('change', () => {
+          statsState[panel].range = select.value;
+          loadPanelStats(panel);
+        });
+        controls.append(select);
+        head.append(controls);
+        section.append(head, el('div', { className: 'portal-stats-body', 'data-stats-body': '' }));
+        return section;
+      }
+
       function renderOverview() {
         const section = el('section', { className: 'portal-overview' });
         section.append(el('p', { className: 'portal-lede', text: 'Everything on the public site is ready to edit here. Changes publish directly to the live website when you press Save.' }));
@@ -211,6 +288,13 @@ Astro.response.headers.set('Cache-Control', 'no-store');
         });
         section.append(steps);
         if (!state.remoteExists) section.append(el('p', { className: 'portal-notice', text: 'This is the approved starting content. Press Save once to publish it to your connected content portal.' }));
+
+        const stats = el('div', { className: 'portal-stats' });
+        stats.append(statsPanel('visits', 'Website visits'), statsPanel('submissions', 'Form submissions'));
+        section.append(stats);
+        loadPanelStats('visits');
+        loadPanelStats('submissions');
+
         return section;
       }
 

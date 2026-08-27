@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /portal
+Disallow: /admin
+Disallow: /api
+
+Sitemap: https://writenova.com/sitemap.xml

@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { recordSubmission } from '../../lib/analytics';
 
 export const prerender = false;
 
@@ -120,6 +121,8 @@ export const POST: APIRoute = async ({ request }) => {
     console.error('Brevo contact email request failed.', error);
     return json(502, { ok: false, message: 'We could not send your inquiry. Please try again in a moment.' });
   }
+
+  await recordSubmission(submission.fullName, submission.service);
 
   return json(200, { ok: true, message: 'Thank you for contacting WriteNova. We’ve received your project details and will get back to you shortly.' });
 };

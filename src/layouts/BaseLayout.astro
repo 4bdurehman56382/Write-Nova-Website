@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import faviconUrl from '../../Assets/writenova-mark.svg';
+import socialImageUrl from '../../Assets/writenova-mark@1200.png';
 
 interface Props {
   title?: string;
@@ -12,8 +14,22 @@ const {
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+const socialImageAbsoluteUrl = new URL(socialImageUrl.src, Astro.site ?? Astro.url.origin).href;
 const searchConsoleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 const analyticsId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const linkedInUrl = import.meta.env.PUBLIC_LINKEDIN_URL;
+const whatsAppNumber = import.meta.env.PUBLIC_WHATSAPP_NUMBER;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'WriteNova',
+  description,
+  url: canonicalUrl,
+  image: socialImageAbsoluteUrl,
+  ...(whatsAppNumber ? { telephone: `+${whatsAppNumber}` } : {}),
+  ...(linkedInUrl ? { sameAs: [linkedInUrl] } : {}),
+};
 ---
 
 <!doctype html>
@@ -29,7 +45,15 @@ const analyticsId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImageAbsoluteUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageAbsoluteUrl} />
     {searchConsoleVerification && <meta name="google-site-verification" content={searchConsoleVerification} />}
+    <link rel="icon" type="image/svg+xml" href={faviconUrl.src} />
+    <link rel="apple-touch-icon" href={socialImageUrl.src} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     <link rel="preconnect" href="https://api.fontshare.com" />
     <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" />
     {analyticsId && (

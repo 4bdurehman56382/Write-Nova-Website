@@ -7,7 +7,7 @@ The portal uses [Neon](https://console.neon.tech) on its free plan. Neon holds t
 ## One-time setup
 
 1. Create a free Neon project at [console.neon.tech](https://console.neon.tech). In the project dashboard, select **Connect** and copy the pooled connection string. It starts with `postgresql://`.
-2. Open Neon’s **SQL Editor**, create a query, paste the full contents of [`neon/schema.sql`](./neon/schema.sql), and click **Run**. This creates the single content record used by the site.
+2. Open Neon’s **SQL Editor**, create a query, paste the full contents of [`neon/schema.sql`](./neon/schema.sql), and click **Run**. This creates the content record used by the site, plus the `page_visits` and `form_submissions` tables that power the Overview charts in the portal.
 3. Choose the login name (an email address is recommended) and strong password the client will use for `/portal`. Generate a secure password hash locally:
 
    ```bash

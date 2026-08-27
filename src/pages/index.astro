@@ -2,8 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import logoUrl from '../../Assets/writenova-mark.svg';
 import { getWebsiteContent } from '../lib/cms';
+import { recordVisit } from '../lib/analytics';
 
 const { settings, services, reasons, process, industries, faqs } = await getWebsiteContent();
+await recordVisit('/');
 const whatsAppNumber = (settings.social.whatsAppNumber || import.meta.env.PUBLIC_WHATSAPP_NUMBER)?.replace(/\D/g, '');
 const whatsAppUrl = whatsAppNumber ? `https://wa.me/${whatsAppNumber}` : '#contact';
 const linkedInUrl = settings.social.linkedInUrl || import.meta.env.PUBLIC_LINKEDIN_URL || '#contact';
