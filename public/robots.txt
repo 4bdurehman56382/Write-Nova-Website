@@ -4,4 +4,4 @@ Disallow: /portal
 Disallow: /admin
 Disallow: /api
 
-Sitemap: https://writenova.com/sitemap.xml
+Sitemap: https://writenova.org/sitemap.xml
