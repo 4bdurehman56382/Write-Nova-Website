@@ -84,7 +84,6 @@ export interface WebsiteSettings {
     projectLabel: string;
     projectTitleFirst: string;
     projectTitleLast: string;
-    privacyLabel: string;
   };
 }
 
