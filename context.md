@@ -40,7 +40,7 @@ Mobile QA in August 2026 covered 375 px, 390 px, 428 px, and 844 px landscape li
 3. Add real `PUBLIC_WHATSAPP_NUMBER` and `PUBLIC_LINKEDIN_URL` to activate the social links. Until then they safely direct visitors to the inquiry form.
 4. Optionally set `PUBLIC_GA_MEASUREMENT_ID` and `PUBLIC_GOOGLE_SITE_VERIFICATION` to activate GA4 and Search Console verification.
 5. Neon CMS credentials are configured in Vercel Production. Before client handoff, replace the temporary `admin/admin` login with a strong unique credential as described in `CMS_SETUP.md`.
-6. Replace `https://writenova.com` in `astro.config.mjs` if the final domain differs.
+6. Replace `https://writenova.org` in `astro.config.mjs` if the final domain differs.
 7. The Neon CMS was deployed successfully to Vercel Production on August 14, 2026. Production portal: `https://writenova-website.vercel.app/portal`.
 
 ## Useful commands
