@@ -228,7 +228,7 @@ img { display: block; max-width: 100%; }
 .footer-project { display: grid; justify-items: start; gap: 13px; color: var(--beige); }
 .footer-project > span { color: var(--coral); font-size: 10px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; }
 .footer-project strong { font-size: clamp(3rem, 6.4vw, 6.4rem); font-weight: 500; letter-spacing: -.065em; line-height: .82; transition: color 180ms ease, transform 220ms var(--ease-out); }
-.footer-project i { color: var(--coral); font-style: normal; white-space: nowrap; }
+.footer-project i { display: inline-block; color: var(--coral); font-size: .62em; font-style: normal; line-height: 1; white-space: nowrap; vertical-align: .12em; }
 .footer-project:hover strong { color: var(--coral); transform: translateX(8px); }
 .footer-directory { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 19px 0; border-top: 1px solid var(--line); }
 .footer-links nav { display: flex; flex-wrap: wrap; gap: 10px 20px; }

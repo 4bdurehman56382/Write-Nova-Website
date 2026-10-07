@@ -34,6 +34,7 @@ const hasLinkedInUrl = Boolean(settings.social.linkedInUrl || import.meta.env.PU
         <div class="header-socials" aria-label="Social links">
           <a href={whatsAppUrl} target={whatsAppNumber ? '_blank' : undefined} rel={whatsAppNumber ? 'noreferrer' : undefined} aria-label="Contact WriteNova on WhatsApp" title={whatsAppNumber ? 'Chat with WriteNova on WhatsApp' : 'Business WhatsApp number to be connected'}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.05 0C5.48 0 .14 5.33.14 11.9c0 2.09.54 4.12 1.57 5.92L0 24l6.35-1.66a11.88 11.88 0 0 0 5.7 1.45h.01c6.56 0 11.9-5.33 11.9-11.9 0-3.18-1.24-6.16-3.46-8.4ZM12.05 21.8a9.9 9.9 0 0 1-5.05-1.39l-.36-.21-3.77.99 1-3.68-.24-.38a9.9 9.9 0 1 1 8.42 4.67Zm5.43-7.42c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.66.15-.2.3-.76.97-.93 1.17-.17.2-.35.22-.65.07-1.77-.88-2.94-1.57-4.11-3.56-.31-.53.31-.5.88-1.66.1-.2.05-.37-.02-.52-.08-.15-.66-1.59-.9-2.18-.24-.57-.49-.5-.66-.5h-.57c-.2 0-.52.08-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.47 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.5 1.89.82 2.63.9 3.58.76.58-.09 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/></svg></a>
           <a href={linkedInUrl} target={hasLinkedInUrl ? '_blank' : undefined} rel={hasLinkedInUrl ? 'noreferrer' : undefined} aria-label="Find WriteNova on LinkedIn" title={hasLinkedInUrl ? 'Visit WriteNova on LinkedIn' : 'LinkedIn profile to be connected'}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.58c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.67H9.34V8.98h3.41v1.57h.05c.47-.9 1.64-1.85 3.37-1.85 3.61 0 4.28 2.38 4.28 5.47v6.28ZM5.32 7.41a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14Zm-1.78 13.04h3.57V8.98H3.54v11.47Z"/></svg></a>
+          <a class="email-link" href={`mailto:${contactEmail}`} data-email={contactEmail} aria-label="Email WriteNova" title={`Email ${contactEmail}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 6.25v11.5A2.25 2.25 0 0 1 19.75 20h-1.5V9.36L12 14.04 5.75 9.36V20h-1.5A2.25 2.25 0 0 1 2 17.75V6.25c0-1.87 2.13-2.94 3.64-1.81L12 9.2l6.36-4.76C19.87 3.31 22 4.38 22 6.25Z"/></svg></a>
         </div>
         <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-button>
           <span class="sr-only">Open navigation</span>
@@ -242,10 +243,10 @@ const hasLinkedInUrl = Boolean(settings.social.linkedInUrl || import.meta.env.PU
       <div class="footer-socials" aria-label="Social links">
         <a href={whatsAppUrl} target={whatsAppNumber ? '_blank' : undefined} rel={whatsAppNumber ? 'noreferrer' : undefined} aria-label="Contact WriteNova on WhatsApp" title={whatsAppNumber ? 'Chat with WriteNova on WhatsApp' : 'Business WhatsApp number to be connected'}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12.05 0C5.48 0 .14 5.33.14 11.9c0 2.09.54 4.12 1.57 5.92L0 24l6.35-1.66a11.88 11.88 0 0 0 5.7 1.45h.01c6.56 0 11.9-5.33 11.9-11.9 0-3.18-1.24-6.16-3.46-8.4ZM12.05 21.8a9.9 9.9 0 0 1-5.05-1.39l-.36-.21-3.77.99 1-3.68-.24-.38a9.9 9.9 0 1 1 8.42 4.67Zm5.43-7.42c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.66.15-.2.3-.76.97-.93 1.17-.17.2-.35.22-.65.07-1.77-.88-2.94-1.57-4.11-3.56-.31-.53.31-.5.88-1.66.1-.2.05-.37-.02-.52-.08-.15-.66-1.59-.9-2.18-.24-.57-.49-.5-.66-.5h-.57c-.2 0-.52.08-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.47 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.5 1.89.82 2.63.9 3.58.76.58-.09 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/></svg></a>
         <a href={linkedInUrl} target={hasLinkedInUrl ? '_blank' : undefined} rel={hasLinkedInUrl ? 'noreferrer' : undefined} aria-label="Find WriteNova on LinkedIn" title={hasLinkedInUrl ? 'Visit WriteNova on LinkedIn' : 'LinkedIn profile to be connected'}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.58c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.67H9.34V8.98h3.41v1.57h.05c.47-.9 1.64-1.85 3.37-1.85 3.61 0 4.28 2.38 4.28 5.47v6.28ZM5.32 7.41a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14Zm-1.78 13.04h3.57V8.98H3.54v11.47Z"/></svg></a>
-        <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${contactEmail}`} target="_blank" rel="noreferrer" aria-label="Email WriteNova" title={`Email ${contactEmail}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 6.25v11.5A2.25 2.25 0 0 1 19.75 20h-1.5V9.36L12 14.04 5.75 9.36V20h-1.5A2.25 2.25 0 0 1 2 17.75V6.25c0-1.87 2.13-2.94 3.64-1.81L12 9.2l6.36-4.76C19.87 3.31 22 4.38 22 6.25Z"/></svg></a>
+        <a class="email-link" href={`mailto:${contactEmail}`} data-email={contactEmail} aria-label="Email WriteNova" title={`Email ${contactEmail}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 6.25v11.5A2.25 2.25 0 0 1 19.75 20h-1.5V9.36L12 14.04 5.75 9.36V20h-1.5A2.25 2.25 0 0 1 2 17.75V6.25c0-1.87 2.13-2.94 3.64-1.81L12 9.2l6.36-4.76C19.87 3.31 22 4.38 22 6.25Z"/></svg></a>
       </div>
     </div>
-    <div class="shell footer-bottom"><span>© {new Date().getFullYear()} {settings.brandName}. All rights reserved.</span><a href={`mailto:${contactEmail}`}>{contactEmail}</a></div>
+    <div class="shell footer-bottom"><span>© {new Date().getFullYear()} {settings.brandName}. All rights reserved.</span><a class="email-link" href={`mailto:${contactEmail}`} data-email={contactEmail}>{contactEmail}</a></div>
   </footer>
 
   <a
@@ -261,6 +262,14 @@ const hasLinkedInUrl = Boolean(settings.social.linkedInUrl || import.meta.env.PU
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const menuButton = document.querySelector('[data-menu-button]');
     const menu = document.querySelector('[data-menu]');
+
+    const desktopPointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    document.querySelectorAll('a.email-link').forEach((link) => link.addEventListener('click', (event) => {
+      if (!desktopPointer.matches) return;
+      event.preventDefault();
+      const to = encodeURIComponent(link.getAttribute('data-email') || '');
+      window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${to}`, '_blank', 'noopener');
+    }));
 
     menuButton?.addEventListener('click', () => {
       const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
