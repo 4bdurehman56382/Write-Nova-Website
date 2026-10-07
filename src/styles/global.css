@@ -17,7 +17,7 @@
 
 * { box-sizing: border-box; }
 html { background: var(--ink); scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; background: var(--ink); color: var(--beige); font-family: 'General Sans', Arial, sans-serif; font-size: 16px; line-height: 1.5; }
+body { margin: 0; min-width: 320px; background: var(--ink); color: var(--beige); font-family: 'General Sans', Arial, sans-serif; font-size: 16px; line-height: 1.5; font-variant-emoji: text; }
 body.menu-open { overflow: hidden; }
 button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }

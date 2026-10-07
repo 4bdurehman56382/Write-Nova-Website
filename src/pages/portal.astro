@@ -59,7 +59,7 @@ Astro.response.headers.set('Cache-Control', 'no-store');
             <input id="portal-password" name="password" type="password" autocomplete="current-password" required />
           </div>
           <p class="portal-message" data-login-message aria-live="polite"></p>
-          <button type="submit" class="portal-primary">Sign in <span aria-hidden="true">↗</span></button>
+          <button type="submit" class="portal-primary">Sign in <span aria-hidden="true">↗︎</span></button>
         </form>
       </section>
 
@@ -80,7 +80,7 @@ Astro.response.headers.set('Cache-Control', 'no-store');
             </div>
             <div class="portal-save-area">
               <p class="portal-save-status" data-save-status aria-live="polite">All changes saved</p>
-              <button type="button" class="portal-primary" data-save-button>Save changes <span aria-hidden="true">↗</span></button>
+              <button type="button" class="portal-primary" data-save-button>Save changes <span aria-hidden="true">↗︎</span></button>
             </div>
           </header>
           <div class="portal-editor-body" data-portal-content></div>
@@ -445,7 +445,7 @@ Astro.response.headers.set('Cache-Control', 'no-store');
           saveStatus.className = 'portal-save-status is-error';
         } finally {
           saveButton.disabled = false;
-          saveButton.innerHTML = 'Save changes <span aria-hidden="true">↗</span>';
+          saveButton.innerHTML = 'Save changes <span aria-hidden="true">↗︎</span>';
         }
       });
 
